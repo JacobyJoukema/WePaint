@@ -1,2 +1,4 @@
 # WePaint
-Twitch Bot For Painting
+
+From Episode One Of Binary and Beers
+Not A Twitch Bot For Painting
