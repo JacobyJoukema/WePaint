@@ -105,4 +105,5 @@ dist
 
 # Python
 __pycache__
+shapes.js
 shapes.json

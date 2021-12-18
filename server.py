@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 
 
-DATABASE_FILENAME = "shapes.json"
+DATABASE_FILENAME = "shapes.js"
 
 
 class Circle(BaseModel):
@@ -33,7 +33,7 @@ app = FastAPI()
 
 if not os.path.isfile(DATABASE_FILENAME):
     with open(DATABASE_FILENAME, "w") as f:
-        f.write("[]")
+        f.write("shapes = []")
 
 
 @app.get("/", status_code=200)
@@ -53,12 +53,12 @@ async def add_circle(shape: Circle) -> ResponseID:
     }
 
     with open(DATABASE_FILENAME, "r") as f:
-        shapes = json.load(f)
+        shapes = json.loads(f.read()[8:])
 
     shapes.append(item)
 
     with open(DATABASE_FILENAME, "w") as f:
-        f.write(json.dumps(shapes))
+        f.write("shapes = %s" % json.dumps(shapes))
 
     return ResponseID(id=item["id"])
 
@@ -76,12 +76,12 @@ async def add_rect(shape: Rectangle) -> ResponseID:
     }
 
     with open(DATABASE_FILENAME, "r") as f:
-        shapes = json.load(f)
+        shapes = json.loads(f.read()[8:])
 
     shapes.append(item)
 
     with open(DATABASE_FILENAME, "w") as f:
-        f.write(json.dumps(shapes))
+        f.write("shapes = %s" % json.dumps(shapes))
 
     return ResponseID(id=item["id"])
 
@@ -89,7 +89,7 @@ async def add_rect(shape: Rectangle) -> ResponseID:
 @app.delete("/shapes/circle/{id}", status_code=204)
 async def del_circle(id: str) -> dict:
     with open(DATABASE_FILENAME, "r") as f:
-        shapes = json.load(f)
+        shapes = json.loads(f.read()[8:])
 
     shapes = [
         shape
@@ -98,7 +98,7 @@ async def del_circle(id: str) -> dict:
     ]
 
     with open(DATABASE_FILENAME, "w") as f:
-        f.write(json.dumps(shapes))
+        f.write("shapes = %s" % json.dumps(shapes))
 
     return {}
 
@@ -106,13 +106,13 @@ async def del_circle(id: str) -> dict:
 @app.delete("/shapes/rect/{id}", status_code=204)
 async def del_rect(id: str) -> dict:
     with open(DATABASE_FILENAME, "r") as f:
-        shapes = json.load(f)
+        shapes = json.loads(f.read()[8:])
 
     shapes = [
         shape for shape in shapes if not (shape["id"] == id and shape["type"] == "rect")
     ]
 
     with open(DATABASE_FILENAME, "w") as f:
-        f.write(json.dumps(shapes))
+        f.write("shapes = %s" % json.dumps(shapes))
 
     return {}
