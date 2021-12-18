@@ -15,6 +15,14 @@ class Circle(BaseModel):
     colour: str
 
 
+class Rectangle(BaseModel):
+    x: float
+    y: float
+    w: float
+    h: float
+    colour: str
+
+
 app = FastAPI()
 
 if not os.path.isfile(DATABASE_FILENAME):
@@ -34,6 +42,26 @@ async def circle(shape: Circle):
         "x": shape.x,
         "y": shape.y,
         "r": shape.r,
+        "colour": shape.colour,
+    }
+
+    with open(DATABASE_FILENAME, "r") as f:
+        shapes = json.load(f)
+
+    shapes.append(item)
+
+    with open(DATABASE_FILENAME, "w") as f:
+        f.write(json.dumps(shapes))
+
+
+@app.post("/shapes/rect", status_code=204)
+async def rect(shape: Rectangle):
+    item = {
+        "type": "rect",
+        "x": shape.x,
+        "y": shape.y,
+        "w": shape.w,
+        "h": shape.h,
         "colour": shape.colour,
     }
 
