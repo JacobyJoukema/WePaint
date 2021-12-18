@@ -1,1 +1,1 @@
-shapes = [{"type": "circle", "id": "5e7c410a-ff71-406f-a2c1-c83818634fc3", "x": 0.5, "y": 0.6, "r": 0.1, "colour": "#FF0000"}]
+shapes = []
