@@ -6,9 +6,11 @@ from uuid import uuid4
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+from database import connect_database, create_circle_table, create_rect_table, del_circle, del_rect, get_circles, get_rectangles, insert_circle, insert_rect
 
-DATABASE_FILENAME = "shapes.js"
 
+
+DB_CONN = ""
 
 class Circle(BaseModel):
     x: float
@@ -24,95 +26,118 @@ class Rectangle(BaseModel):
     h: float
     colour: str
 
+class Shapes(BaseModel):
+    circles: list[Circle]
+    rectangles: list[Rectangle]
+
 
 class ResponseID(BaseModel):
     id: str
 
-
 app = FastAPI()
-
-if not os.path.isfile(DATABASE_FILENAME):
-    with open(DATABASE_FILENAME, "w") as f:
-        f.write("shapes = []")
-
 
 @app.get("/", status_code=200)
 async def root() -> dict:
     return {}
 
 
+
+@app.get("/shapes", response_model=Shapes, status_code=200)
+async def get_shapes() -> Shapes:
+    with connect_database() as conn:
+        circles = get_circles(conn)
+        rects = get_rectangles(conn)
+        print(circles)
+        print (circles[0][0])
+        circle_resp = []
+        rect_resp = []
+        for circle in circles:
+            circle_resp.append(
+                {
+                    "id": circle[0],
+                    "colour": circle[1],
+                    "x": circle[2],
+                    "y": circle[3],
+                    "r": circle[4],
+                }
+            )
+        for rect in rects:
+            rect_resp.append(
+                {
+                    "id": rect[0],
+                    "colour": rect[1],
+                    "x": rect[2],
+                    "y": rect[3],
+                    "w": rect[4],
+                    "h": rect[5],
+                }
+            )
+
+        resp = Shapes(
+            circles=circle_resp,
+            rectangles=rect_resp,
+        )
+
+        return resp
+
+
 @app.post("/shapes/circle", response_model=ResponseID, status_code=200)
 async def add_circle(shape: Circle) -> ResponseID:
-    item = {
-        "type": "circle",
-        "id": str(uuid4()),
-        "x": shape.x,
-        "y": shape.y,
-        "r": shape.r,
-        "colour": shape.colour,
-    }
+    with connect_database() as conn:
+        item = {
+            "id": str(uuid4()),
+            "x": shape.x,
+            "y": shape.y,
+            "r": shape.r,
+            "colour": shape.colour,
+        }
 
-    with open(DATABASE_FILENAME, "r") as f:
-        shapes = json.loads(f.read()[8:])
+        insert_circle(conn, item)
 
-    shapes.append(item)
-
-    with open(DATABASE_FILENAME, "w") as f:
-        f.write("shapes = %s" % json.dumps(shapes))
-
-    return ResponseID(id=item["id"])
+        return ResponseID(id=item["id"])
 
 
-@app.post("/shapes/rect", status_code=204)
+@app.post("/shapes/rect", response_model=ResponseID, status_code=200)
 async def add_rect(shape: Rectangle) -> ResponseID:
-    item = {
-        "type": "rect",
-        "id": str(uuid4()),
-        "x": shape.x,
-        "y": shape.y,
-        "w": shape.w,
-        "h": shape.h,
-        "colour": shape.colour,
-    }
+    with connect_database() as conn:
 
-    with open(DATABASE_FILENAME, "r") as f:
-        shapes = json.loads(f.read()[8:])
+        item = {
+            "id": str(uuid4()),
+            "x": shape.x,
+            "y": shape.y,
+            "w": shape.w,
+            "h": shape.h,
+            "colour": shape.colour,
+        }
 
-    shapes.append(item)
+        insert_rect(conn, item)
 
-    with open(DATABASE_FILENAME, "w") as f:
-        f.write("shapes = %s" % json.dumps(shapes))
-
-    return ResponseID(id=item["id"])
+        return ResponseID(id=item["id"])
 
 
 @app.delete("/shapes/circle/{id}", status_code=204)
-async def del_circle(id: str) -> dict:
-    with open(DATABASE_FILENAME, "r") as f:
-        shapes = json.loads(f.read()[8:])
-
-    shapes = [
-        shape
-        for shape in shapes
-        if not (shape["id"] == id and shape["type"] == "circle")
-    ]
-
-    with open(DATABASE_FILENAME, "w") as f:
-        f.write("shapes = %s" % json.dumps(shapes))
-
-    return {}
+async def circle_del(id: str) -> dict:
+    with connect_database() as conn:
+       
+        del_circle(conn, id)
+        return {}
 
 
 @app.delete("/shapes/rect/{id}", status_code=204)
-async def del_rect(id: str) -> dict:
-    with open(DATABASE_FILENAME, "r") as f:
-        shapes = json.loads(f.read()[8:])
+async def rect_del(id: str) -> dict:
+    with connect_database() as conn:
+        del_rect(conn, id)
 
-    shapes = [
-        shape for shape in shapes if not (shape["id"] == id and shape["type"] == "rect")
-    ]
+        return {}
 
-    with open(DATABASE_FILENAME, "w") as f:
-        f.write("shapes = %s" % json.dumps(shapes))
+def main() -> FastAPI:
+    with connect_database() as conn:
+        print ("Init DB")
 
-    return {}
+        create_circle_table(conn)
+        create_rect_table(conn)
+
+        get_circles(conn)
+        get_rectangles(conn)
+     
+        return app
