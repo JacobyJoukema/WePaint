@@ -1,5 +1,12 @@
-install:
-	python3 -m pip install uvicorn fastapi
+export DOCKER_BUILDKIT = 1
 
-server:
-	uvicorn server:app --reload
+build:
+	docker build srv --tag srv:latest
+	docker build bot --tag bot:latest
+
+up:
+	docker-compose up
+
+down:
+	docker-compose down --remove-orphans
+
