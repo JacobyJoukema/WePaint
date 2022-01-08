@@ -1,14 +1,14 @@
 import { FunctionalComponent, h } from "preact";
 import { Router, Route } from "preact-router";
 
-import styles from "./App.css";
+import Main from "./Main";
 
 const App: FunctionalComponent = () => {
   return (
-    <div class={styles.container}>
-      <Router>
-      </Router>
-    </div>
+    <Router>
+      {/*<Route path="/" component={Landing} /> */}
+      <Route path="/:channel" component={Main} />
+    </Router>
   );
 };
 
