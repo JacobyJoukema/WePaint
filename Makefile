@@ -5,6 +5,7 @@ build:
 	docker build bot --tag bot:latest
 
 up:
+	docker-compose --version
 	docker-compose up
 
 down:

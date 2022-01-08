@@ -3,7 +3,7 @@ const fetch = require("node-fetch")
 
 // Sends a shape to the Python server.
 function sendShapeToServer(type, body) {
-    const endpoint = `http://srv:8000/shapes/${type}`;
+    const endpoint = `http://localhost:8001/shapes/${type}`;
     const metadata = {method: "POST", body: body};
 
     fetch(endpoint, metadata)

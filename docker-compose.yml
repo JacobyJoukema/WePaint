@@ -7,5 +7,5 @@ services:
   srv:
     image: srv:latest
     ports:
-      - 8000:8000
+      - 8001:8000
   
