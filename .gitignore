@@ -107,3 +107,5 @@ dist
 __pycache__
 shapes.js
 shapes.json
+
+build/
