@@ -8,4 +8,3 @@ services:
     image: srv:latest
     ports:
       - 8001:8000
-  
