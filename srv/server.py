@@ -8,10 +8,6 @@ from pydantic import BaseModel
 
 from database import connect_database, create_circle_table, create_rect_table, del_circle, del_rect, get_circles, get_rectangles, insert_circle, insert_rect
 
-
-
-DB_CONN = ""
-
 class Circle(BaseModel):
     x: float
     y: float
