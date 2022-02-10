@@ -16,4 +16,4 @@ ADD . /usr/src/app
 RUN npm run tsc
 # Start
 CMD [ "npm", "start" ]
-EXPOSE 7001
+EXPOSE 8080
