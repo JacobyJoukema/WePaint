@@ -21,4 +21,5 @@ COPY . ./
 RUN ["npm", "run", "build"]
 
 # start app
+RUN npm run build
 CMD ["npm", "run", "serve"]
