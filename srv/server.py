@@ -3,10 +3,12 @@ import os
 from typing import Optional
 from uuid import uuid4
 
+from database import (connect_database, create_circle_table, create_rect_table,
+                      del_circle, del_rect, get_circles, get_rectangles,
+                      insert_circle, insert_rect)
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from database import connect_database, create_circle_table, create_rect_table, del_circle, del_rect, get_circles, get_rectangles, insert_circle, insert_rect
 
 class Circle(BaseModel):
     x: float
@@ -22,6 +24,7 @@ class Rectangle(BaseModel):
     h: float
     colour: str
 
+
 class Shapes(BaseModel):
     circles: list[Circle]
     rectangles: list[Rectangle]
@@ -30,12 +33,13 @@ class Shapes(BaseModel):
 class ResponseID(BaseModel):
     id: str
 
+
 app = FastAPI()
+
 
 @app.get("/", status_code=200)
 async def root() -> dict:
     return {}
-
 
 
 @app.get("/shapes", response_model=Shapes, status_code=200)
@@ -44,7 +48,7 @@ async def get_shapes() -> Shapes:
         circles = get_circles(conn)
         rects = get_rectangles(conn)
         print(circles)
-        print (circles[0][0])
+        print(circles[0][0])
         circle_resp = []
         rect_resp = []
         for circle in circles:
@@ -114,7 +118,7 @@ async def add_rect(shape: Rectangle) -> ResponseID:
 @app.delete("/shapes/circle/{id}", status_code=204)
 async def circle_del(id: str) -> dict:
     with connect_database() as conn:
-       
+
         del_circle(conn, id)
         return {}
 
@@ -126,14 +130,15 @@ async def rect_del(id: str) -> dict:
 
         return {}
 
+
 def main() -> FastAPI:
     with connect_database() as conn:
-        print ("Init DB")
+        print("Init DB")
 
         create_circle_table(conn)
         create_rect_table(conn)
 
         get_circles(conn)
         get_rectangles(conn)
-     
+
         return app

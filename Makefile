@@ -11,3 +11,6 @@ up:
 down:
 	docker-compose down --remove-orphans
 
+fmt:
+	black srv
+	isort srv
