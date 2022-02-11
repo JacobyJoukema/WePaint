@@ -2,15 +2,16 @@ from contextlib import contextmanager
 
 import psycopg2
 import os
-    
+
 @contextmanager
 def connect_database():
     conn = psycopg2.connect(
         host="localhost",
-        database="wepaint",
-        user="wepaint",
-        password=os.getenv("DB_PASS"),
-        port="5432")
+        database=os.environ["POSTGRES_DB"],
+        user=os.environ["POSTGRES_USER"],
+        password=os.environ["POSTGRES_PASSWORD"],
+        port="5432"
+    )
 
     try:
         yield conn
