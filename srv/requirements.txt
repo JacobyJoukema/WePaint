@@ -1,3 +1,5 @@
+black==22.1.0
 fastapi==0.71.0
+isort==5.10.1
 uvicorn==0.16.0
 psycopg2==2.9.3

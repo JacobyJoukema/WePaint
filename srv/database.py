@@ -1,7 +1,8 @@
+import os
 from contextlib import contextmanager
 
 import psycopg2
-import os
+
 
 @contextmanager
 def connect_database():
@@ -10,7 +11,7 @@ def connect_database():
         database=os.environ["POSTGRES_DB"],
         user=os.environ["POSTGRES_USER"],
         password=os.environ["POSTGRES_PASSWORD"],
-        port="5432"
+        port="5432",
     )
 
     try:
@@ -18,16 +19,22 @@ def connect_database():
     finally:
         conn.close()
 
+
 def create_circle_table(conn):
     cur = conn.cursor()
 
-    cur.execute('CREATE TABLE IF NOT EXISTS circles (id uuid PRIMARY KEY, colour text, x float4, y float4, r float4);')
+    cur.execute(
+        "CREATE TABLE IF NOT EXISTS circles (id uuid PRIMARY KEY, colour text, x float4, y float4, r float4);"
+    )
     conn.commit()
+
 
 def create_rect_table(conn):
     cur = conn.cursor()
 
-    cur.execute('CREATE TABLE IF NOT EXISTS rectangles (id uuid PRIMARY KEY, colour text, x float4, y float4, w float4, h float4);')
+    cur.execute(
+        "CREATE TABLE IF NOT EXISTS rectangles (id uuid PRIMARY KEY, colour text, x float4, y float4, w float4, h float4);"
+    )
     conn.commit()
 
 
@@ -38,7 +45,8 @@ def get_circles(conn):
 
     circles = curr.fetchall()
 
-    return (circles)
+    return circles
+
 
 def get_rectangles(conn):
     curr = conn.cursor()
@@ -47,18 +55,24 @@ def get_rectangles(conn):
 
     rectangles = curr.fetchall()
 
-    return (rectangles)
+    return rectangles
+
 
 def insert_rect(conn, rect):
     curr = conn.cursor()
 
-    curr.execute(f"INSERT INTO rectangles VALUES ('{rect['id']}', '{rect['colour']}', '{rect['x']}', '{rect['y']}', '{rect['w']}', '{rect['h']}');")
+    curr.execute(
+        f"INSERT INTO rectangles VALUES ('{rect['id']}', '{rect['colour']}', '{rect['x']}', '{rect['y']}', '{rect['w']}', '{rect['h']}');"
+    )
     conn.commit()
+
 
 def insert_circle(conn, circle):
     curr = conn.cursor()
 
-    curr.execute(f"INSERT INTO circles VALUES ('{circle['id']}', '{circle['colour']}', '{circle['x']}', '{circle['y']}', '{circle['r']}');")
+    curr.execute(
+        f"INSERT INTO circles VALUES ('{circle['id']}', '{circle['colour']}', '{circle['x']}', '{circle['y']}', '{circle['r']}');"
+    )
     conn.commit()
 
 
