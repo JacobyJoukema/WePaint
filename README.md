@@ -1,4 +1,3 @@
 # WePaint
 
-From Episode One Of Binary and Beers
-Not A Twitch Bot For Painting
+The project nobody asked for by the twitch channel nobody watches
