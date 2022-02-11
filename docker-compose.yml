@@ -6,6 +6,11 @@ services:
     networks:
       - paintNET
 
+  client:
+    image: client:latest
+    ports:
+      - 8080:8080
+
   srv:
     image: srv:latest
     networks:

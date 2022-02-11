@@ -13,6 +13,7 @@ help:
 build:
 	docker build srv --tag srv:latest
 	docker build bot --tag bot:latest
+	docker build client --tag client:latest
 
 .PHONY: up
 up:
