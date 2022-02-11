@@ -3,8 +3,10 @@ const fetch = require("node-fetch")
 
 // Sends a shape to the Python server.
 function sendShapeToServer(type, body) {
-    const endpoint = `http://localhost:8001/shapes/${type}`;
-    const metadata = {method: "POST", body: body};
+    const endpoint = `http://srv:8000/shapes/${type}`;
+
+    const headers = {'Content-Type': 'application/json'}
+    const metadata = {method: "POST", body: body, headers: headers};
 
     fetch(endpoint, metadata)
         .then(async response => {
@@ -31,9 +33,11 @@ function onMessageHandler(channel, context, msg, self) {
     const name = tokens[0];
 
     if (name === "!circle") {
-        sendShapeToServer("circle", tokens.slice(1).join(" "));
+        const body = tokens.slice(1).join(" ");
+        sendShapeToServer("circle", body);
     } else if (name === "!rect") {
-        sendShapeToServer("rect", tokens.slice(1).join(" "));
+        const body = tokens.slice(1).join(" ");
+        sendShapeToServer("rect", body);
     } else {
         console.debug(`onMessageHandler(): message "${msg}" is not a command.`);
     }
