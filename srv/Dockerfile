@@ -10,4 +10,4 @@ RUN pip install -r "requirements.txt"
 COPY server.py .
 COPY database.py .
 
-ENTRYPOINT ["uvicorn", "server:app", "--host", "0.0.0.0", "--reload"]
+CMD uvicorn --host 0.0.0.0 --reload --factory server:main

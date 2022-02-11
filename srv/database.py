@@ -7,7 +7,7 @@ import psycopg2
 @contextmanager
 def connect_database():
     conn = psycopg2.connect(
-        host="localhost",
+        host="db",
         database=os.environ["POSTGRES_DB"],
         user=os.environ["POSTGRES_USER"],
         password=os.environ["POSTGRES_PASSWORD"],
