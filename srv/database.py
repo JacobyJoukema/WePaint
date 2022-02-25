@@ -38,7 +38,7 @@ def create_rect_table(conn):
     conn.commit()
 
 
-def get_circles(conn, beg_time, end_time):
+def get_circles(conn, beg_time = None, end_time = None):
     curr = conn.cursor()
 
     query = build_time_query(beg_time, end_time)
@@ -50,7 +50,7 @@ def get_circles(conn, beg_time, end_time):
     return circles
 
 
-def get_rectangles(conn, beg_time, end_time):
+def get_rectangles(conn, beg_time = None, end_time = None):
     curr = conn.cursor()
 
     query = build_time_query(beg_time, end_time)

@@ -137,7 +137,7 @@ def main() -> FastAPI:
         create_circle_table(conn)
         create_rect_table(conn)
 
-        get_circles(conn)
-        get_rectangles(conn)
+        get_circles(conn, None, None)
+        get_rectangles(conn, None, None)
 
         return app
