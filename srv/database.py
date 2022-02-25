@@ -33,7 +33,7 @@ def create_rect_table(conn):
     cur = conn.cursor()
 
     cur.execute(
-        "CREATE TABLE IF NOT EXISTS rectangles (id uuid PRIMARY KEY, colour text, x float4, y float4, w float4, h float4, created_at created_at timestamp with time zone);"
+        "CREATE TABLE IF NOT EXISTS rectangles (id uuid PRIMARY KEY, colour text, x float4, y float4, w float4, h float4, created_at timestamp with time zone);"
     )
     conn.commit()
 
