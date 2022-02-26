@@ -43,12 +43,11 @@ async def root() -> dict:
 
 
 @app.get("/shapes", response_model=Shapes, status_code=200)
-async def get_shapes() -> Shapes:
+async def get_shapes(beg_time: int = None, end_time: int = None) -> Shapes:
     with connect_database() as conn:
-        circles = get_circles(conn)
-        rects = get_rectangles(conn)
-        print(circles)
-        print(circles[0][0])
+        circles = get_circles(conn, beg_time, end_time)
+        rects = get_rectangles(conn, beg_time, end_time)
+
         circle_resp = []
         rect_resp = []
         for circle in circles:
@@ -138,7 +137,7 @@ def main() -> FastAPI:
         create_circle_table(conn)
         create_rect_table(conn)
 
-        get_circles(conn)
-        get_rectangles(conn)
+        get_circles(conn, None, None)
+        get_rectangles(conn, None, None)
 
         return app
