@@ -58,6 +58,7 @@ async def get_shapes(beg_time: int = None, end_time: int = None) -> Shapes:
                     "x": circle[2],
                     "y": circle[3],
                     "r": circle[4],
+                    "type": "circle",
                 }
             )
         for rect in rects:
@@ -69,14 +70,12 @@ async def get_shapes(beg_time: int = None, end_time: int = None) -> Shapes:
                     "y": rect[3],
                     "w": rect[4],
                     "h": rect[5],
+                    "type": "rect",
                 }
             )
 
-        resp = Shapes(
-            circles=circle_resp,
-            rectangles=rect_resp,
-        )
-
+        resp = circle_resp + rect_resp
+        resp.sort(lambda x: x.id)
         return resp
 
 
