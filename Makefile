@@ -14,6 +14,7 @@ build:
 	docker build srv --tag srv:latest
 	docker build bot --tag bot:latest
 	docker build client --tag client:latest
+	docker build minter --tag minter:latest
 
 .PHONY: up
 up:
