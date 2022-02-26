@@ -58,6 +58,7 @@ async def get_shapes(beg_time: int = None, end_time: int = None) -> Shapes:
                     "x": circle[2],
                     "y": circle[3],
                     "r": circle[4],
+                    "created_at": circle[5],
                     "type": "circle",
                 }
             )
@@ -70,12 +71,13 @@ async def get_shapes(beg_time: int = None, end_time: int = None) -> Shapes:
                     "y": rect[3],
                     "w": rect[4],
                     "h": rect[5],
+                    "created_at": rect[6],
                     "type": "rect",
                 }
             )
 
         resp = circle_resp + rect_resp
-        resp.sort(lambda x: x.id)
+        resp.sort(lambda x: x.created_at)
         return resp
 
 
